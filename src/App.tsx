@@ -12,8 +12,12 @@ import {
 import { colordarkBlue900 } from './assets/styles'
 import Icon from './components/Icon'
 import Bg from './assets/images/bg-desktop-dark.jpg'
+<<<<<<< HEAD
 import TodoList from './Todo/TodoList'
 import TodoInput from './Todo/TodoInput'
+=======
+import TodoList from './components/TodoList'
+>>>>>>> 8498623628009fa2f8328b94ce1e7d6f1a41cfe6
 
 
 // STYLES
