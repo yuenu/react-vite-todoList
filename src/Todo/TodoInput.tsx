@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Item } from "../../components/Item";
+import { Item } from "../components/Item";
 import styled from "styled-components";
-import { colordarkGray200 } from "../../assets/styles";
+import { colordarkGray200, colordarkGray300 } from "../assets/styles";
 
 const InputSection = styled(Item)`
   margin-bottom: 20px;
@@ -16,6 +16,10 @@ const InputSection = styled(Item)`
     color: ${colordarkGray200};
     border: 0;
     outline:0;
+
+    &::placeholder {
+      color: ${colordarkGray300};
+    }
   }
 `;
 
@@ -25,14 +29,21 @@ const TodoInput = () => {
     setUserInput(event.target.value);
   };
 
+  const submitHandler = (event: React.FormEvent<EventTarget>) => {
+    event.preventDefault()
+    console.log('submit:', event)
+  }
+
   return (
-    <InputSection done={false}>
+    <form onSubmit={submitHandler}>
+      <InputSection done={false}>
       <div>
         <input type="checkbox" id="todoInput" />
         <label htmlFor="todoInput"> </label>
       </div>
-      <input type="text" value={userInput} onChange={inputHandler} />
+      <input type="text" value={userInput} onChange={inputHandler} placeholder="Text your TODO" />
     </InputSection>
+    </form>
   );
 };
 

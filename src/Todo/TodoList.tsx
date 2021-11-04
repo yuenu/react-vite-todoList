@@ -1,4 +1,4 @@
-import TodoItem from "../TodoItem"
+import TodoItem from "./TodoItem"
 import styled from "styled-components"
 
 const dummy_data = [
