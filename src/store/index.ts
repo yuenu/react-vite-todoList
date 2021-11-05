@@ -2,7 +2,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 type Todo = {
-    id: number,
+    id?: number,
     text: string,
     done: boolean
 }
@@ -45,17 +45,19 @@ const todoSlice = createSlice({
     name: 'todos',
     initialState: initialToDoState,
     reducers: {
-        addTodo: (state, action: PayloadAction<Todo>) => [...state, action.payload],
+        addTodo: (state, action: PayloadAction<Todo>) => [...state, { id: Math.random(), ...action.payload }],
         removeTodo: (state, action: PayloadAction<Todo>) => {
             return state.filter(item => item.id !== action.payload.id)
         }
     }
 })
 
-export const {addTodo, removeTodo} = todoSlice.actions
+export const { addTodo, removeTodo } = todoSlice.actions
+
+export type RootState = ReturnType<typeof store.getState>
 
 export const store = configureStore({
-  reducer: {
-    todos: todoSlice.reducer
-  }
+    reducer: {
+        todos: todoSlice.reducer
+    }
 })
