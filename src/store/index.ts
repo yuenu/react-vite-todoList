@@ -1,13 +1,18 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-type Todo = {
-    id?: number,
+export type TodoType = {
+    id: number,
     text: string,
     done: boolean
 }
 
-const initialToDoState: Todo[] = [
+export type inputTodoType = {
+    text: string,
+    done: boolean
+}
+
+const initialTodos = [
     {
         id: 1,
         text: 'Complete online JavaScript course',
@@ -40,24 +45,55 @@ const initialToDoState: Todo[] = [
     },
 ]
 
+const initialState = {
+    todos: initialTodos,
+    isLoading: false,
+    visiableTodos: initialTodos,
+    statusControl: 'all'
+}
 
 const todoSlice = createSlice({
-    name: 'todos',
-    initialState: initialToDoState,
+    name: 'todosSlice',
+    initialState: initialState,
     reducers: {
-        addTodo: (state, action: PayloadAction<Todo>) => [...state, { id: Math.random(), ...action.payload }],
-        removeTodo: (state, action: PayloadAction<Todo>) => {
-            return state.filter(item => item.id !== action.payload.id)
+        addTodo: (state, action: PayloadAction<inputTodoType>) => {
+            state.todos = [{ id: Math.random(), ...action.payload }, ...state.todos]
+        },
+        removeTodo: (state, action: PayloadAction<{ id: number}>) => {
+            state.todos = state.todos.filter(item => item.id !== action.payload.id)
+        },
+        clearCompleted: (state) => {
+            state.todos = state.todos.filter((item) => item.done === false)
+            state.visiableTodos = state.todos
+        },
+        updateTodo: (state, action: PayloadAction<TodoType>) => {
+            const wouldUpdatedItem = state.todos.filter((item) => item.done === false)
+        },
+        getAllTodos: (state) => {
+            state.visiableTodos = state.todos
+        },
+        getActiveTodos: (state) => {
+            state.visiableTodos = state.todos.filter((item) => item.done === false)
+        },
+        getCompletedTodos: (state) => {
+            state.visiableTodos = state.todos.filter((item) => item.done === true)
         }
     }
 })
 
-export const { addTodo, removeTodo } = todoSlice.actions
+export const {
+    addTodo,
+    removeTodo,
+    clearCompleted,
+    getAllTodos,
+    getActiveTodos,
+    getCompletedTodos
+} = todoSlice.actions
 
 export type RootState = ReturnType<typeof store.getState>
 
 export const store = configureStore({
     reducer: {
-        todos: todoSlice.reducer
+        todosSlice: todoSlice.reducer
     }
 })

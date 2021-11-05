@@ -14,6 +14,8 @@ import Icon from './components/Icon'
 import Bg from './assets/images/bg-desktop-dark.jpg'
 import TodoList from './Todo/TodoList'
 import TodoInput from './Todo/TodoInput'
+import { useDispatch, useSelector } from 'react-redux'
+import { clearCompleted, getActiveTodos, getAllTodos, getCompletedTodos, RootState } from './store'
 
 
 // STYLES
@@ -118,7 +120,9 @@ const Footer = styled.footer`
 `
 
 const App = () => {
-
+  const dispatch = useDispatch()
+  const todos = useSelector((state: RootState) => state.todosSlice.todos)
+  const visiableTodos = useSelector((state: RootState) => state.todosSlice.visiableTodos)
   const [theme, setTheme] = useState<'dark' | 'light'>('dark')
 
   const changeTheme = () => {
@@ -129,6 +133,20 @@ const App = () => {
 
     console.log('change theme')
   }
+
+  const clearCompletedHandler = () => {
+    dispatch(clearCompleted())
+  }
+
+  // FIXME: If input new todo, the status wolud not updated
+  // const getAllTodos = () => setTodos(state)
+  // const getActiveTodos = () => {
+  //   setTodos(state.filter(item => item.done === false))
+  // }
+
+  // const getCompletedTodos = () => {
+  //   setTodos(state.filter(item => item.done === true))
+  // }
 
   return (
     <>
@@ -143,16 +161,16 @@ const App = () => {
 
           <TodoInput></TodoInput>
 
-          <TodoList></TodoList>
+          <TodoList todos={visiableTodos}></TodoList>
 
           <FilterSection>
-            <p>5 items left</p>
+            <p>{todos.length} items left</p>
             <StateControl>
-              <button className="active">All</button>
-              <button>Active</button>
-              <button>Completed</button>
+              <button className="active" onClick={() => dispatch(getAllTodos())} >All</button>
+              <button onClick={() => dispatch(getActiveTodos())}>Active</button>
+              <button onClick={() => dispatch(getCompletedTodos())}>Completed</button>
             </StateControl>
-            <ClearButton>Clear Completed</ClearButton>
+            <ClearButton onClick={clearCompletedHandler}>Clear Completed</ClearButton>
           </FilterSection>
 
           <Tips>Drag and drop to reorder list</Tips>

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Item } from "../components/Item";
 import styled from "styled-components";
 import { colordarkGray200, colordarkGray300 } from "../assets/styles";
-import { addTodo, removeTodo } from "../store";
+import { addTodo, getAllTodos, removeTodo } from "../store";
 import { useDispatch } from "react-redux";
 
 const InputSection = styled(Item)`
@@ -29,25 +29,32 @@ const InputSection = styled(Item)`
 const TodoInput = () => {
   const dispatch = useDispatch()
 
-  const [userInput, setUserInput] = useState('');
+  const [input, setInput] = useState('');
+  const [check, setCheck] = useState(false)
+
   const inputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUserInput(event.target.value);
+    setInput(event.target.value);
   };
 
   const submitHandler = (event: React.FormEvent<EventTarget>) => {
     event.preventDefault()
-    dispatch(addTodo({ text: userInput, done: false }))
-    setUserInput('')
+    dispatch(addTodo({ text: input, done: check })),
+    dispatch(getAllTodos())
+    setInput('')
   }
+
+  const stateHandler = () => {
+    setCheck((prevState) => !prevState);
+  };
 
   return (
     <form onSubmit={submitHandler}>
-      <InputSection done={false}>
+      <InputSection done={check}>
         <div>
           <input type="checkbox" id="todoInput" />
-          <label htmlFor="todoInput"> </label>
+          <label htmlFor="todoInput" onClick={stateHandler}></label>
         </div>
-        <input type="text" value={userInput} onChange={inputHandler} placeholder="Text your TODO" />
+        <input type="text" value={input} onChange={inputHandler} placeholder="Text your TODO item" />
       </InputSection>
     </form>
   );

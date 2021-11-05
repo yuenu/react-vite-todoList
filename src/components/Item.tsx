@@ -17,6 +17,7 @@ export const Item = styled.div<ItemProps>`
   background-color: ${colordarkBlue800};
   display: flex;
   align-items: center;
+  justify-content: space-between;
   border-bottom: 1px solid ${colordarkGray400};
   color: ${colordarkGray200};
   position: relative;
@@ -58,8 +59,14 @@ export const Item = styled.div<ItemProps>`
   }
 
   span {
+    display:inline-block;
+    max-width: 370px;
     margin-left: 20px;
     text-decoration: ${(props) => (props.done ? "line-through" : "")};
     color: ${(props) => (props.done ? colordarkGray300 : "inherit")};
+  }
+
+  .delete {
+    cursor: pointer;   
   }
 `;
