@@ -14,6 +14,8 @@ import Icon from './components/Icon'
 import Bg from './assets/images/bg-desktop-dark.jpg'
 import TodoList from './Todo/TodoList'
 import TodoInput from './Todo/TodoInput'
+import { useDispatch, useSelector } from 'react-redux'
+import { clearCompleted, getActiveTodos, getAllTodos, getCompletedTodos, RootState } from './store'
 
 
 // STYLES
@@ -118,8 +120,11 @@ const Footer = styled.footer`
 `
 
 const App = () => {
-
+  const dispatch = useDispatch()
+  const todos = useSelector((state: RootState) => state.todosSlice.todos)
+  const visiableTodos = useSelector((state: RootState) => state.todosSlice.visiableTodos)
   const [theme, setTheme] = useState<'dark' | 'light'>('dark')
+  const [stateStatus, setStateStatus] = useState<'all' | 'active' | 'completed'>('all')
 
   const changeTheme = () => {
     setTheme((preState) => {
@@ -128,6 +133,25 @@ const App = () => {
     })
 
     console.log('change theme')
+  }
+
+  const clearCompletedHandler = () => {
+    dispatch(clearCompleted())
+  }
+
+  const getAllTodosHandler = () => {
+    dispatch(getAllTodos())
+    setStateStatus('all')
+  }
+
+  const getActiveTodosHandler = () => {
+    dispatch(getActiveTodos())
+    setStateStatus('active')
+  }
+
+  const getCompletedTodosHamdler = () => {
+    dispatch(getCompletedTodos())
+    setStateStatus('completed')
   }
 
   return (
@@ -143,16 +167,16 @@ const App = () => {
 
           <TodoInput></TodoInput>
 
-          <TodoList></TodoList>
+          <TodoList todos={visiableTodos}></TodoList>
 
           <FilterSection>
-            <p>5 items left</p>
+            <p>{todos.length} items left</p>
             <StateControl>
-              <button className="active">All</button>
-              <button>Active</button>
-              <button>Completed</button>
+              <button className={stateStatus === 'all' ? 'active' : ''} onClick={getAllTodosHandler} >All</button>
+              <button className={stateStatus === 'active' ? 'active' : ''} onClick={getActiveTodosHandler}>Active</button>
+              <button className={stateStatus === 'completed' ? 'active' : ''} onClick={getCompletedTodosHamdler}>Completed</button>
             </StateControl>
-            <ClearButton>Clear Completed</ClearButton>
+            <ClearButton onClick={clearCompletedHandler}>Clear Completed</ClearButton>
           </FilterSection>
 
           <Tips>Drag and drop to reorder list</Tips>
