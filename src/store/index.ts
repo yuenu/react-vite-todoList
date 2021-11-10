@@ -72,8 +72,8 @@ const todoSlice = createSlice({
             state.todos = state.todos.filter((item) => item.done === false)
             state.visiableTodos = state.todos
         },
-        updateTodo: (state, action: PayloadAction<TodoType>) => {
-            const wouldUpdatedItem = state.todos.filter((item) => item.done === false)
+        updateTodo: (state, action: PayloadAction<TodoType[]>) => {
+            state.todos = action.payload
         },
         getAllTodos: (state) => {
             state.visiableTodos = state.todos
@@ -92,6 +92,7 @@ const todoSlice = createSlice({
 export const {
     addTodo,
     removeTodo,
+    updateTodo,
     clearCompleted,
     getAllTodos,
     getActiveTodos,

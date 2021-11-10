@@ -1,6 +1,8 @@
 import TodoItem from "./TodoItem"
 import styled from "styled-components"
 import { TodoType } from '../store'
+import { Droppable } from 'react-beautiful-dnd'
+
 
 const List = styled.div`
   border-radius: 4px;
@@ -12,12 +14,22 @@ interface PropsType {
 }
 
 const TodoList = (props: PropsType) => {
+
+
   return (
-    <List>
-      {props.todos.map((todo) => {
-        return <TodoItem key={todo.id} {...todo} ></TodoItem>
-      })}
-    </List>
+    <Droppable droppableId={props.todos.length.toString()}>
+      {(provider, snapshot) => 
+        <List
+          ref={provider.innerRef}
+          {...provider.droppableProps}
+          // isDraggingOver={snapshot.isDraggingOver}
+        >
+          {props.todos.map((todo, index) => {
+            return <TodoItem key={todo.id} {...todo} index={index} ></TodoItem>
+          })}
+        </List>
+      }
+    </Droppable>
   )
 }
 

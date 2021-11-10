@@ -17,6 +17,10 @@ export const GlobalStyles = createGlobalStyle`
     font-size: 18px;
     line-height: 1.5;
     min-height: 100vh;
+
+    @media(max-width:550px) {
+      font-size:16px;
+    }
   }
 
   img {
