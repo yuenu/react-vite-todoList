@@ -124,6 +124,7 @@ const App = () => {
   const todos = useSelector((state: RootState) => state.todosSlice.todos)
   const visiableTodos = useSelector((state: RootState) => state.todosSlice.visiableTodos)
   const [theme, setTheme] = useState<'dark' | 'light'>('dark')
+  const [stateStatus, setStateStatus] = useState<'all' | 'active' | 'completed'>('all')
 
   const changeTheme = () => {
     setTheme((preState) => {
@@ -138,15 +139,20 @@ const App = () => {
     dispatch(clearCompleted())
   }
 
-  // FIXME: If input new todo, the status wolud not updated
-  // const getAllTodos = () => setTodos(state)
-  // const getActiveTodos = () => {
-  //   setTodos(state.filter(item => item.done === false))
-  // }
+  const getAllTodosHandler = () => {
+    dispatch(getAllTodos())
+    setStateStatus('all')
+  }
 
-  // const getCompletedTodos = () => {
-  //   setTodos(state.filter(item => item.done === true))
-  // }
+  const getActiveTodosHandler = () => {
+    dispatch(getActiveTodos())
+    setStateStatus('active')
+  }
+
+  const getCompletedTodosHamdler = () => {
+    dispatch(getCompletedTodos())
+    setStateStatus('completed')
+  }
 
   return (
     <>
@@ -166,9 +172,9 @@ const App = () => {
           <FilterSection>
             <p>{todos.length} items left</p>
             <StateControl>
-              <button className="active" onClick={() => dispatch(getAllTodos())} >All</button>
-              <button onClick={() => dispatch(getActiveTodos())}>Active</button>
-              <button onClick={() => dispatch(getCompletedTodos())}>Completed</button>
+              <button className={stateStatus === 'all' ? 'active' : ''} onClick={getAllTodosHandler} >All</button>
+              <button className={stateStatus === 'active' ? 'active' : ''} onClick={getActiveTodosHandler}>Active</button>
+              <button className={stateStatus === 'completed' ? 'active' : ''} onClick={getCompletedTodosHamdler}>Completed</button>
             </StateControl>
             <ClearButton onClick={clearCompletedHandler}>Clear Completed</ClearButton>
           </FilterSection>

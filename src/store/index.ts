@@ -12,6 +12,12 @@ export type inputTodoType = {
     done: boolean
 }
 
+export const enum StateStatus {
+    All = 'all',
+    ACTIVE = 'active',
+    COMPLETED = 'completed'
+}
+
 const initialTodos = [
     {
         id: 1,
@@ -49,7 +55,7 @@ const initialState = {
     todos: initialTodos,
     isLoading: false,
     visiableTodos: initialTodos,
-    statusControl: 'all'
+    statusControl: StateStatus.All
 }
 
 const todoSlice = createSlice({
@@ -77,7 +83,9 @@ const todoSlice = createSlice({
         },
         getCompletedTodos: (state) => {
             state.visiableTodos = state.todos.filter((item) => item.done === true)
-        }
+        },
+        // setStateStatus(state, action: PayloadAction<StateStatus>) => {
+        // }
     }
 })
 

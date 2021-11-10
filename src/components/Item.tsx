@@ -67,6 +67,8 @@ export const Item = styled.div<ItemProps>`
   }
 
   .delete {
-    cursor: pointer;   
+    cursor: pointer;
+    display: flex;
+    align-items: center;
   }
 `;
