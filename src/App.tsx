@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import {
   colordarkBlue800,
@@ -15,7 +15,7 @@ import Bg from './assets/images/bg-desktop-dark.jpg'
 import TodoList from './Todo/TodoList'
 import TodoInput from './Todo/TodoInput'
 import { useDispatch, useSelector } from 'react-redux'
-import { clearCompleted, getActiveTodos, getAllTodos, getCompletedTodos, RootState, updateTodo } from './store'
+import { clearCompleted, RootState, updatedAllTodos} from './store'
 import { DragDropContext, DropResult } from 'react-beautiful-dnd'
 
 
@@ -124,6 +124,7 @@ const Footer = styled.footer`
     color: hsl(228, 45%, 44%);
   }
 `
+const ThemeContext = React.createContext('light')
 
 const App = () => {
   const dispatch = useDispatch()
@@ -141,25 +142,6 @@ const App = () => {
     console.log('change theme')
   }
 
-  const clearCompletedHandler = () => {
-    dispatch(clearCompleted())
-  }
-
-  const getAllTodosHandler = () => {
-    dispatch(getAllTodos())
-    setStateStatus('all')
-  }
-
-  const getActiveTodosHandler = () => {
-    dispatch(getActiveTodos())
-    setStateStatus('active')
-  }
-
-  const getCompletedTodosHamdler = () => {
-    dispatch(getCompletedTodos())
-    setStateStatus('completed')
-  }
-
   const onDragEndHandler = (result: DropResult) => {
     const { destination, source, draggableId } = result
 
@@ -174,46 +156,47 @@ const App = () => {
     const newTodos = Array.from(todos)
     newTodos.splice(source.index, 1)
     newTodos.splice(destination.index, 0, draggedItem)
-
-    dispatch(updateTodo(newTodos))
-    dispatch(getAllTodos())
+    
+    dispatch(updatedAllTodos(newTodos))
   }
 
   return (
     <>
-      <GlobalStyles></GlobalStyles>
-      <DragDropContext onDragEnd={onDragEndHandler}>
-        <Container>
-          <Background />
-          <Main>
-            <Header>
-              <h1>Todo</h1>
-              <Icon.Sun onClick={changeTheme} />
-            </Header>
+    <GlobalStyles></GlobalStyles>
+    <ThemeContext.Provider value="dark">
+        <DragDropContext onDragEnd={onDragEndHandler}>
+          <Container>
+            <Background />
+            <Main>
+              <Header>
+                <h1>Todo</h1>
+                <Icon.Sun onClick={changeTheme} />
+              </Header>
 
-            <TodoInput></TodoInput>
+              <TodoInput></TodoInput>
 
-            <TodoList todos={visiableTodos}></TodoList>
+              <TodoList todos={todos} stateStatus={stateStatus}></TodoList>
 
-            <FilterSection>
-              <p>{todos.length} items left</p>
-              <StateControl>
-                <button className={stateStatus === 'all' ? 'active' : ''} onClick={getAllTodosHandler} >All</button>
-                <button className={stateStatus === 'active' ? 'active' : ''} onClick={getActiveTodosHandler}>Active</button>
-                <button className={stateStatus === 'completed' ? 'active' : ''} onClick={getCompletedTodosHamdler}>Completed</button>
-              </StateControl>
-              <ClearButton onClick={clearCompletedHandler}>Clear Completed</ClearButton>
-            </FilterSection>
+              <FilterSection>
+                <p>{todos.length} items left</p>
+                <StateControl>
+                  <button className={stateStatus === 'all' ? 'active' : ''} onClick={() => setStateStatus('all')} >All</button>
+                  <button className={stateStatus === 'active' ? 'active' : ''} onClick={() => setStateStatus('active')}>Active</button>
+                  <button className={stateStatus === 'completed' ? 'active' : ''} onClick={() => setStateStatus('completed')}>Completed</button>
+                </StateControl>
+                <ClearButton onClick={() => dispatch(clearCompleted())}>Clear Completed</ClearButton>
+              </FilterSection>
 
-            <Tips>Drag and drop to reorder list</Tips>
-          </Main>
+              <Tips>Drag and drop to reorder list</Tips>
+            </Main>
 
-          <Footer className="attribution">
-            Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>.
-            Coded by <a href="https://github.com/yuenu">yuenu</a>.
-          </Footer>
-        </Container>
-      </DragDropContext>
+            <Footer className="attribution">
+              Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>.
+              Coded by <a href="https://github.com/yuenu">yuenu</a>.
+            </Footer>
+          </Container>
+        </DragDropContext>
+      </ThemeContext.Provider>
     </>
   )
 }

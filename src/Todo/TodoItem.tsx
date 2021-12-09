@@ -1,9 +1,11 @@
 import { Item } from "../components/Item";
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { ReactType, useEffect, useLayoutEffect, useRef, useState } from "react";
 import Icon from '../components/Icon'
 import { useDispatch } from "react-redux";
-import { getAllTodos, removeTodo } from "../store";
+import { removeTodo, updatedTodo } from "../store";
 import { Draggable } from 'react-beautiful-dnd'
+import styled from 'styled-components'
+import { colordarkBlue900, colordarkGray200, colordarkGray300 } from "../assets/styles";
 
 type PropsType = {
   id: number;
@@ -12,10 +14,33 @@ type PropsType = {
   index: number
 };
 
-type callbackFn = () => void
-// type DoubleClickCallbackFn = (event: React.MouseEvent<HTMLSpanElement>) => void
+const ItemContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+`
 
-function useSingleAndDoubleClick(actionSimpleClick: callbackFn, actionDoubleClick: callbackFn, delay = 250) {
+const TextInput = styled.input`
+  width: 100%;
+  padding: 0 10px;
+  margin-left: 20px;
+  margin-right: 40px;
+  font-size:18px;
+  background-color: ${colordarkBlue900};
+  color: ${colordarkGray200};
+  border: 0;
+  outline:0;
+  display: inline-block;
+
+  &::placeholder {
+    color: ${colordarkGray300};
+  }
+`
+
+type NormalFn = () => void
+
+function useSingleAndDoubleClick(actionSimpleClick: NormalFn, actionDoubleClick: NormalFn, delay = 250) {
   const [click, setClick] = useState(0);
 
   useEffect(() => {
@@ -40,6 +65,9 @@ const TodoItem = ({ text, done, id, index }: PropsType) => {
   const dispatch = useDispatch()
   const [check, setCheck] = useState(done);
   const inputRef = useRef<HTMLInputElement>(null)
+  const inputContent = useRef<HTMLSpanElement>(null)
+  const [isEdit, setIsEdit] = useState(false)
+  const [input, setInput] = useState(text)
 
   useLayoutEffect(() => {
     if (inputRef.current !== null) inputRef.current.checked = done
@@ -47,38 +75,54 @@ const TodoItem = ({ text, done, id, index }: PropsType) => {
 
   const onSingleClickHandler = () => {
     setCheck((prevState) => !prevState);
+    dispatch(updatedTodo({
+      id: id,
+      text: text,
+      done: !done
+    }))
   };
 
-  // const onDoubleClickHandler = (event: React.MouseEvent<HTMLSpanElement>) => {
-  //   console.log('change to edit mode', event)
-  // }
-
   const onDoubleClickHandler = () => {
-    console.log('change to edit mode')
+    setIsEdit(true)
   }
 
   const removeTodoHandler = (id: number) => {
     dispatch(removeTodo({ id }))
-    dispatch(getAllTodos())
   }
 
   const clickHandler = useSingleAndDoubleClick(onSingleClickHandler, onDoubleClickHandler)
 
+  const changeInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInput(event.target.value)
+  }
+
+  const keyDownHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if(event.key === 'Enter') {
+      setIsEdit(false)
+      dispatch(updatedTodo({
+        id: id,
+        text: input,
+        done: done
+      }))
+    }
+  }
+
   return (
     <Draggable draggableId={id.toString()} index={index}>
-      {(provided, snapshot) => 
-        <Item 
+      {(provided, snapshot) =>
+        <Item
           done={check}
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
         >
-          <div className="item__container">
+          <ItemContainer className="item__container">
             <input type="checkbox" id={`item${id}`} ref={inputRef} />
             <label htmlFor={`item${id}`} onClick={clickHandler} >
-              <span>{text}</span>
+              {!isEdit && <span>{text}</span>}
             </label>
-          </div>
+            {isEdit && <TextInput type="text" value={input} onChange={changeInputHandler} onKeyDown={keyDownHandler} placeholder="Text your todo item" />}
+          </ItemContainer>
           <div onClick={() => removeTodoHandler(id)}>
             <Icon.Cross className="delete" />
           </div>

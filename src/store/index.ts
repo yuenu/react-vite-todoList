@@ -65,38 +65,31 @@ const todoSlice = createSlice({
         addTodo: (state, action: PayloadAction<inputTodoType>) => {
             state.todos = [{ id: Math.random(), ...action.payload }, ...state.todos]
         },
-        removeTodo: (state, action: PayloadAction<{ id: number}>) => {
+        removeTodo: (state, action: PayloadAction<{ id: number }>) => {
             state.todos = state.todos.filter(item => item.id !== action.payload.id)
         },
         clearCompleted: (state) => {
             state.todos = state.todos.filter((item) => item.done === false)
             state.visiableTodos = state.todos
         },
-        updateTodo: (state, action: PayloadAction<TodoType[]>) => {
+        updatedTodo: (state, action: PayloadAction<TodoType>) => {
+            const updatedTodo = state.todos.filter(item => item.id === action.payload.id)
+            const updatedTodoIndex = state.todos.indexOf(updatedTodo[0])
+            state.todos[updatedTodoIndex] = action.payload
+        },
+        updatedAllTodos: (state, action: PayloadAction<TodoType[]>) => {
+            if (state.todos.length !== action.payload.length) return console.warn('Assign todos is not the same length as original')
             state.todos = action.payload
-        },
-        getAllTodos: (state) => {
-            state.visiableTodos = state.todos
-        },
-        getActiveTodos: (state) => {
-            state.visiableTodos = state.todos.filter((item) => item.done === false)
-        },
-        getCompletedTodos: (state) => {
-            state.visiableTodos = state.todos.filter((item) => item.done === true)
-        },
-        // setStateStatus(state, action: PayloadAction<StateStatus>) => {
-        // }
+        }
     }
 })
 
 export const {
     addTodo,
     removeTodo,
-    updateTodo,
+    updatedTodo,
     clearCompleted,
-    getAllTodos,
-    getActiveTodos,
-    getCompletedTodos
+    updatedAllTodos
 } = todoSlice.actions
 
 export type RootState = ReturnType<typeof store.getState>

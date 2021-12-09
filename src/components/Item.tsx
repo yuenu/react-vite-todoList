@@ -8,13 +8,10 @@ import {
 } from "../assets/styles";
 import CheckIcon from "../assets/images/icon-check.svg";
 
-export interface ItemProps {
-  done: boolean;
-}
-
-export const Item = styled.div<ItemProps>`
-  padding: 14px 20px;
+export const Item = styled.div<{done: boolean;}>`
+  padding: 0 20px;
   background-color: ${colordarkBlue800};
+  height:56px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -50,7 +47,7 @@ export const Item = styled.div<ItemProps>`
       content: "";
       display: ${(props) => (props.done ? "block" : "none")};
       position: absolute;
-      top: 7px;
+      top: 10px;
       left: 7px;
       width: 10px;
       height: 10px;
