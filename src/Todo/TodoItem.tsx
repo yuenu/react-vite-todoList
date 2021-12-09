@@ -6,6 +6,7 @@ import { removeTodo, updatedTodo } from "../store";
 import { Draggable } from 'react-beautiful-dnd'
 import styled from 'styled-components'
 import { colordarkBlue900, colordarkGray200, colordarkGray300 } from "../assets/styles";
+import { ThemeContext } from '../App'
 
 type PropsType = {
   id: number;
@@ -97,7 +98,7 @@ const TodoItem = ({ text, done, id, index }: PropsType) => {
   }
 
   const keyDownHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if(event.key === 'Enter') {
+    if (event.key === 'Enter') {
       setIsEdit(false)
       dispatch(updatedTodo({
         id: id,
@@ -108,27 +109,33 @@ const TodoItem = ({ text, done, id, index }: PropsType) => {
   }
 
   return (
-    <Draggable draggableId={id.toString()} index={index}>
-      {(provided, snapshot) =>
-        <Item
-          done={check}
-          ref={provided.innerRef}
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
-        >
-          <ItemContainer className="item__container">
-            <input type="checkbox" id={`item${id}`} ref={inputRef} />
-            <label htmlFor={`item${id}`} onClick={clickHandler} >
-              {!isEdit && <span>{text}</span>}
-            </label>
-            {isEdit && <TextInput type="text" value={input} onChange={changeInputHandler} onKeyDown={keyDownHandler} placeholder="Text your todo item" />}
-          </ItemContainer>
-          <div onClick={() => removeTodoHandler(id)}>
-            <Icon.Cross className="delete" />
-          </div>
-        </Item>
-      }
-    </Draggable>
+    <ThemeContext.Consumer>
+      {theme => (
+        <Draggable draggableId={id.toString()} index={index}>
+          {(provided, snapshot) =>
+            <Item
+              theme={theme}
+              done={check}
+              ref={provided.innerRef}
+              {...provided.draggableProps}
+              {...provided.dragHandleProps}
+            >
+              <ItemContainer className="item__container">
+                <input type="checkbox" id={`item${id}`} ref={inputRef} />
+                <label htmlFor={`item${id}`} onClick={clickHandler} >
+                  {!isEdit && <span>{text}</span>}
+                </label>
+                {isEdit && <TextInput type="text" value={input} onChange={changeInputHandler} onKeyDown={keyDownHandler} placeholder="Text your todo item" />}
+              </ItemContainer>
+              <div onClick={() => removeTodoHandler(id)}>
+                <Icon.Cross className="delete" />
+              </div>
+            </Item>
+          }
+        </Draggable>
+      )}
+
+    </ThemeContext.Consumer>
   );
 };
 

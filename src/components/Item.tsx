@@ -4,20 +4,24 @@ import {
   colordarkGray200,
   colordarkGray300,
   colordarkGray400,
+  colorlightGray100,
   colorCheck,
+  colorlightGray500,
+  colorlightGray200,
 } from "../assets/styles";
 import CheckIcon from "../assets/images/icon-check.svg";
 
-export const Item = styled.div<{done: boolean;}>`
+export const Item = styled.div<{done: boolean; theme: 'dark' | 'light';}>`
   padding: 0 20px;
-  background-color: ${colordarkBlue800};
+  background-color: ${props => props.theme === 'dark' ? colordarkBlue800 : colorlightGray100};
   height:56px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid ${colordarkGray400};
-  color: ${colordarkGray200};
+  border-bottom: 1px solid ${props => props.theme === 'dark' ? colordarkGray400 : colorlightGray200};
+  color: ${props => props.theme === 'dark' ? colordarkGray200 : colorlightGray500};
   position: relative;
+  transition: all ease 300ms;
 
   input[type="checkbox"] {
     display: none;

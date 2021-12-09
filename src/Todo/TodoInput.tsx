@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 const InputSection = styled(Item)`
   margin-bottom: 20px;
   border: 0;
+  border-radius: 3px;
 `;
 
 const TextInput = styled.input`
@@ -25,8 +26,16 @@ const TextInput = styled.input`
   }
 `
 
+const Label = styled.label`
+  width:100%;
+`
 
-const TodoInput = () => {
+type Props = {
+  theme: 'dark' | 'light'
+}
+
+
+const TodoInput: React.FC<Props> = ({ theme }) => {
   const dispatch = useDispatch()
 
   const [input, setInput] = useState('');
@@ -39,7 +48,7 @@ const TodoInput = () => {
   const submitHandler = (event: React.FormEvent<EventTarget>) => {
     event.preventDefault()
     dispatch(addTodo({ text: input, done: check })),
-    setInput('')
+      setInput('')
   }
 
   const stateHandler = () => {
@@ -48,10 +57,10 @@ const TodoInput = () => {
 
   return (
     <form onSubmit={submitHandler}>
-      <InputSection done={check}>
+      <InputSection done={check} theme={theme}>
         <div>
           <input type="checkbox" id="todoInput" />
-          <label htmlFor="todoInput" onClick={stateHandler}></label>
+          <Label htmlFor="todoInput" onClick={stateHandler}></Label>
         </div>
         <TextInput type="text" value={input} onChange={inputHandler} placeholder="Text your todo item" />
       </InputSection>

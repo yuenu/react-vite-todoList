@@ -6,7 +6,7 @@ import { useEffect, useState } from "react"
 
 
 const List = styled.div`
-  border-radius: 4px;
+  border-radius: 3px 3px 0 0;
   overflow: auto;
   max-height:336px;
 `

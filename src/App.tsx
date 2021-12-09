@@ -1,33 +1,39 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import {
+
   colordarkBlue800,
   colordarkGray100,
   colordarkGray200,
   colordarkGray300,
+  colorlightGray100,
+  colorlightGray200,
   colorlightGray400,
+  colorlightGray500,
   colorPrimary,
   GlobalStyles
 } from './assets/styles'
 import { colordarkBlue900 } from './assets/styles'
 import Icon from './components/Icon'
-import Bg from './assets/images/bg-desktop-dark.jpg'
+import darkBg from './assets/images/bg-desktop-dark.jpg'
+import lightBg from './assets/images/bg-desktop-light.jpg'
 import TodoList from './Todo/TodoList'
 import TodoInput from './Todo/TodoInput'
 import { useDispatch, useSelector } from 'react-redux'
-import { clearCompleted, RootState, updatedAllTodos} from './store'
+import { clearCompleted, RootState, updatedAllTodos } from './store'
 import { DragDropContext, DropResult } from 'react-beautiful-dnd'
 
 
 // STYLES
-const Container = styled.div`
-  background-color: ${colordarkBlue900};
-  color: #ffffff;
+const Container = styled.div<{theme: 'dark' | 'light';}>`
+  background-color: ${props => props.theme === 'dark' ? colordarkBlue900 : colorlightGray200};
+  color: ${props => props.theme === 'dark' ? '#ffffff' : '#333333'};
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  transition: all 300ms ease;
 
   @media(max-width:550px) {
     padding: 0 20px;
@@ -35,13 +41,14 @@ const Container = styled.div`
 `
 
 const Background = styled.div`
-  background: url(${Bg});
+  background: ${props => props.theme === 'dark' ? `url(${darkBg})` : `url(${lightBg})`};
   height: 30vh;
   width: 100%;
   object-fit: cover;
   position: fixed;
   top: 0;
   left: 0;
+  transition: background 300ms ease;
 `
 
 const Main = styled.main`
@@ -61,15 +68,18 @@ const Header = styled.header`
   letter-spacing: 6px;
   font-weight:400;
   margin-bottom:2rem;
+  color: #ffffff;
 `
 
 const FilterSection = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: ${colorlightGray400};
-  background-color: ${colordarkBlue800};
+  color: ${props => props.theme === 'dark' ? colorlightGray400 : colorlightGray500};
+  background-color: ${props => props.theme === 'dark' ? colordarkBlue800 : colorlightGray100};
   padding:10px 20px;
+  transition: all 300ms ease;
+  border-radius: 0 0 3px 3px;
 
   p {
     font-size: 14px;
@@ -124,22 +134,21 @@ const Footer = styled.footer`
     color: hsl(228, 45%, 44%);
   }
 `
-const ThemeContext = React.createContext('light')
+export const ThemeContext = React.createContext<'light' | 'dark'>('dark')
 
 const App = () => {
   const dispatch = useDispatch()
   const todos = useSelector((state: RootState) => state.todosSlice.todos)
-  const visiableTodos = useSelector((state: RootState) => state.todosSlice.visiableTodos)
   const [theme, setTheme] = useState<'dark' | 'light'>('dark')
   const [stateStatus, setStateStatus] = useState<'all' | 'active' | 'completed'>('all')
 
   const changeTheme = () => {
-    setTheme((preState) => {
-      if (preState === 'dark') return 'light'
+
+    setTheme((prev) => {
+      if (prev === 'dark') return 'light'
       return 'dark'
     })
 
-    console.log('change theme')
   }
 
   const onDragEndHandler = (result: DropResult) => {
@@ -152,32 +161,32 @@ const App = () => {
     const draggedItem = Array.from(todos).filter((todo) => {
       return todo.id === parseInt(draggableId, 10)
     })[0]
-    
+
     const newTodos = Array.from(todos)
     newTodos.splice(source.index, 1)
     newTodos.splice(destination.index, 0, draggedItem)
-    
+
     dispatch(updatedAllTodos(newTodos))
   }
 
   return (
     <>
-    <GlobalStyles></GlobalStyles>
-    <ThemeContext.Provider value="dark">
+      <GlobalStyles></GlobalStyles>
+      <ThemeContext.Provider value={theme}>
         <DragDropContext onDragEnd={onDragEndHandler}>
-          <Container>
-            <Background />
+          <Container theme={theme}>
+            <Background theme={theme} />
             <Main>
               <Header>
                 <h1>Todo</h1>
                 <Icon.Sun onClick={changeTheme} />
               </Header>
 
-              <TodoInput></TodoInput>
+              <TodoInput theme={theme} />
 
               <TodoList todos={todos} stateStatus={stateStatus}></TodoList>
 
-              <FilterSection>
+              <FilterSection theme={theme}>
                 <p>{todos.length} items left</p>
                 <StateControl>
                   <button className={stateStatus === 'all' ? 'active' : ''} onClick={() => setStateStatus('all')} >All</button>
