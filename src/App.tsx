@@ -140,7 +140,6 @@ export const ThemeContext = React.createContext<'light' | 'dark'>('dark')
 const App = () => {
   const dispatch = useDispatch()
   const todos = useSelector((state: RootState) => state.todosSlice.todos)
-  const [todosData, setTodosData] = useState(todos)
   const [theme, setTheme] = useState<'dark' | 'light'>('dark')
   const [stateStatus, setStateStatus] = useState<'all' | 'active' | 'completed'>('all')
 
@@ -167,7 +166,6 @@ const App = () => {
     const newTodos = Array.from(todos)
     newTodos.splice(source.index, 1)
     newTodos.splice(destination.index, 0, draggedItem)
-    setTodosData(newTodos)
     dispatch(updatedAllTodos(newTodos))
   }
 
@@ -187,7 +185,7 @@ const App = () => {
 
               <TodoInput theme={theme} />
 
-              <TodoList todos={todosData} stateStatus={stateStatus}></TodoList>
+              <TodoList todos={todos} stateStatus={stateStatus}></TodoList>
 
               <FilterSection theme={theme}>
                 <p>{todos.length} items left</p>
