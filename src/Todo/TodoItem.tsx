@@ -62,13 +62,15 @@ function useSingleAndDoubleClick(actionSimpleClick: NormalFn, actionDoubleClick:
   return () => setClick(prev => prev + 1);
 }
 
-const TodoItem = ({ text, done, id, index }: PropsType) => {
+const TodoItem = React.memo(({ text, done, id, index }: PropsType) => {
   const dispatch = useDispatch()
   const [check, setCheck] = useState(done);
   const inputRef = useRef<HTMLInputElement>(null)
   const inputContent = useRef<HTMLSpanElement>(null)
   const [isEdit, setIsEdit] = useState(false)
   const [input, setInput] = useState(text)
+
+  console.log('todoitem render')
 
   useLayoutEffect(() => {
     if (inputRef.current !== null) inputRef.current.checked = done
@@ -137,6 +139,6 @@ const TodoItem = ({ text, done, id, index }: PropsType) => {
 
     </ThemeContext.Consumer>
   );
-};
+});
 
 export default TodoItem;

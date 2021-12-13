@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import styled from 'styled-components'
 import {
 
@@ -152,7 +152,7 @@ const App = () => {
 
   }
 
-  const onDragEndHandler = (result: DropResult) => {
+  const onDragEndHandler = useCallback((result: DropResult) => {
     const { destination, source, draggableId } = result
 
     if (!destination) return;
@@ -167,7 +167,7 @@ const App = () => {
     newTodos.splice(source.index, 1)
     newTodos.splice(destination.index, 0, draggedItem)
     dispatch(updatedAllTodos(newTodos))
-  }
+  }, [todos])
 
   return (
     <>

@@ -2,7 +2,7 @@ import TodoItem from "./TodoItem"
 import styled from "styled-components"
 import { TodoType } from '../store'
 import { Droppable } from 'react-beautiful-dnd'
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 
 
 const List = styled.div`
@@ -17,6 +17,7 @@ interface PropsType {
 
 const TodoList = ({ todos, stateStatus }: PropsType) => {
   const [renderTodos, setRenderTodos] = useState<TodoType[]>(todos)
+  console.log('todolist render',)
 
   useEffect(() => {
     switch (stateStatus) {
