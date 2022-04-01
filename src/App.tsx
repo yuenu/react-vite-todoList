@@ -41,7 +41,9 @@ const Container = styled.div<{ theme: 'dark' | 'light'; }>`
 `
 
 const Background = styled.div`
-  background: ${props => props.theme === 'dark' ? `url(${darkBg})` : `url(${lightBg})`};
+  background-image: ${props => props.theme === 'dark' ? `url(${darkBg})` : `url(${lightBg})`};
+  background-repeat: no-repeat;
+  background-size: cover;
   height: 30vh;
   width: 100%;
   object-fit: cover;
