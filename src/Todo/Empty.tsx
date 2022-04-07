@@ -1,10 +1,10 @@
-import { Item } from "../components/Item"
+import { Item } from '../components/Item'
 
 const Empty = () => {
-	return (
-		<>
-			<Item done={true}>Empty Todos</Item>
-		</>
-	)
+  return (
+    <>
+      <Item done={true}>Empty Todos</Item>
+    </>
+  )
 }
 export default Empty

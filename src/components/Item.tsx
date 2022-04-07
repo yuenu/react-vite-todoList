@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 import {
   colordarkBlue800,
   colordarkGray200,
@@ -7,23 +7,27 @@ import {
   colorlightGray100,
   colorCheck,
   colorlightGray500,
-  colorlightGray200,
-} from "../assets/styles";
-import CheckIcon from "../assets/images/icon-check.svg";
+  colorlightGray200
+} from '../assets/styles'
+import CheckIcon from '../assets/images/icon-check.svg'
 
-export const Item = styled.div<{done: boolean; theme: 'dark' | 'light';}>`
+export const Item = styled.div<{ done: boolean; theme: 'dark' | 'light' }>`
   padding: 0 20px;
-  background-color: ${props => props.theme === 'dark' ? colordarkBlue800 : colorlightGray100};
-  height:56px;
+  background-color: ${(props) =>
+    props.theme === 'dark' ? colordarkBlue800 : colorlightGray100};
+  height: 56px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid ${props => props.theme === 'dark' ? colordarkGray400 : colorlightGray200};
-  color: ${props => props.theme === 'dark' ? colordarkGray200 : colorlightGray500};
+  border-bottom: 1px solid
+    ${(props) =>
+      props.theme === 'dark' ? colordarkGray400 : colorlightGray200};
+  color: ${(props) =>
+    props.theme === 'dark' ? colordarkGray200 : colorlightGray500};
   position: relative;
   transition: all ease 300ms;
 
-  input[type="checkbox"] {
+  input[type='checkbox'] {
     display: none;
   }
 
@@ -32,7 +36,7 @@ export const Item = styled.div<{done: boolean; theme: 'dark' | 'light';}>`
     cursor: pointer;
 
     &::before {
-      content: "";
+      content: '';
       -webkit-appearance: none;
       border: 1px solid ${colordarkGray300};
       border-radius: 50%;
@@ -44,12 +48,12 @@ export const Item = styled.div<{done: boolean; theme: 'dark' | 'light';}>`
       position: relative;
       vertical-align: middle;
       cursor: pointer;
-      background: ${(props) => (props.done ? colorCheck : "")};
+      background: ${(props) => (props.done ? colorCheck : '')};
     }
 
     &:after {
-      content: "";
-      display: ${(props) => (props.done ? "block" : "none")};
+      content: '';
+      display: ${(props) => (props.done ? 'block' : 'none')};
       position: absolute;
       top: 10px;
       left: 7px;
@@ -60,11 +64,11 @@ export const Item = styled.div<{done: boolean; theme: 'dark' | 'light';}>`
   }
 
   span {
-    display:inline-block;
+    display: inline-block;
     max-width: 370px;
     margin-left: 20px;
-    text-decoration: ${(props) => (props.done ? "line-through" : "")};
-    color: ${(props) => (props.done ? colordarkGray300 : "inherit")};
+    text-decoration: ${(props) => (props.done ? 'line-through' : '')};
+    color: ${(props) => (props.done ? colordarkGray300 : 'inherit')};
   }
 
   .delete {
@@ -72,4 +76,4 @@ export const Item = styled.div<{done: boolean; theme: 'dark' | 'light';}>`
     display: flex;
     align-items: center;
   }
-`;
+`

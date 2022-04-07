@@ -36,7 +36,8 @@ export const GlobalStyles = createGlobalStyle`
 `
 
 export const colorPrimary = 'hsl(220, 98%, 61%)'
-export const colorCheck = 'linear-gradient(to bottom right, rgb(87, 221, 255), hsl(280, 87%, 65%))'
+export const colorCheck =
+  'linear-gradient(to bottom right, rgb(87, 221, 255), hsl(280, 87%, 65%))'
 
 // LIGHT THEME
 export const colorlightGray100 = 'hsl(0, 0%, 98%)'
@@ -44,7 +45,6 @@ export const colorlightGray200 = 'hsl(236, 33%, 92%)'
 export const colorlightGray300 = 'hsl(233, 11%, 84%)'
 export const colorlightGray400 = 'hsl(236, 9%, 61%)'
 export const colorlightGray500 = 'hsl(235, 19%, 35%)'
-
 
 // DARK THEME
 export const colordarkBlue900 = 'hsl(235, 21%, 11%)'

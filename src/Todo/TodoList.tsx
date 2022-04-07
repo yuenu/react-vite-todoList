@@ -1,14 +1,13 @@
-import TodoItem from "./TodoItem"
-import styled from "styled-components"
+import TodoItem from './TodoItem'
+import styled from 'styled-components'
 import { TodoType } from '../store'
 import { Droppable } from 'react-beautiful-dnd'
-import React, { useEffect, useState } from "react"
-
+import React, { useEffect, useState } from 'react'
 
 const List = styled.div`
   border-radius: 3px 3px 0 0;
   overflow: auto;
-  max-height:336px;
+  max-height: 336px;
 `
 interface PropsType {
   todos: TodoType[]
@@ -17,7 +16,7 @@ interface PropsType {
 
 const TodoList = ({ todos, stateStatus }: PropsType) => {
   const [renderTodos, setRenderTodos] = useState<TodoType[]>(todos)
-  console.log('todolist render',)
+  console.log('todolist render')
 
   useEffect(() => {
     switch (stateStatus) {
@@ -35,18 +34,18 @@ const TodoList = ({ todos, stateStatus }: PropsType) => {
 
   return (
     <Droppable droppableId="list">
-      {(provider, snapshot) =>
+      {(provider, snapshot) => (
         <List
           ref={provider.innerRef}
           {...provider.droppableProps}
-        // isDraggingOver={snapshot.isDraggingOver}
+          // isDraggingOver={snapshot.isDraggingOver}
         >
           {renderTodos.map((todo, index) => {
-            return <TodoItem key={todo.id} {...todo} index={index} ></TodoItem>
+            return <TodoItem key={todo.id} {...todo} index={index}></TodoItem>
           })}
           {provider.placeholder}
         </List>
-      }
+      )}
     </Droppable>
   )
 }

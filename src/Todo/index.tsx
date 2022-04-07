@@ -1,7 +1,3 @@
-
-
-const Todo = () => {
-
-}
+const Todo = () => {}
 
 export default Todo
